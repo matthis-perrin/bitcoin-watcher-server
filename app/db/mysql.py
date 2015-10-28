@@ -21,8 +21,11 @@ class MySQL:
     @staticmethod
     def run(query):
         conn = MySQL.get_connection()
-        conn.query(query)
-        return conn.use_result()
+        cursor = conn.cursor()
+        cursor.execute(query)
+        res = cursor.fetchone()
+        conn.commit()
+        return res
 
     @staticmethod
     def create_database(database):
