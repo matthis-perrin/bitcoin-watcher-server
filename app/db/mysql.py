@@ -23,7 +23,7 @@ class MySQL:
         conn = MySQL.get_connection()
         cursor = conn.cursor()
         cursor.execute(query)
-        res = cursor.fetchone()
+        res = cursor.fetchall()
         conn.commit()
         return res
 
