@@ -1,27 +1,19 @@
-from app.db.user import User
-from app.db.user_device import UserDevice
+from pyramid.config import Configurator
+from wsgiref.simple_server import make_server
 
-def print_user(user):
-    print user.user_id, user.creation_time
-    print '\n'
+from app.api.main import wire_routes
+from app.config import Config
 
-def print_device(device):
-    print (device.user_id, device.device_id, device.platform, device.system_version, device.app_version,
-           device.app_version, device.creation_time, device.last_seen)
-    print '\n'
 
-user_id = User.create()
-user = User.get(user_id)
-print_user(user)
+# Setup the api routes
+config = Configurator()
+wire_routes(config)
 
-device_id_1 = UserDevice.create(user_id, "platform1", "system_version1", "app_version1", 'push_token1')
-device_id_2 = UserDevice.create(user_id, "platform2", "system_version2", "app_version2", 'push_token2')
-
-device1 = UserDevice.get(device_id_1)
-device2 = UserDevice.get(device_id_1)
-
-print_device(device1)
-print_device(device2)
-
-for device in user.get_devices():
-    print_device(device)
+# Start the server
+api_config = Config.get('api')
+host = api_config.get('host')
+port = api_config.get('port')
+app = config.make_wsgi_app()
+server = make_server(host, port, app)
+print 'Started API on {}:{}'.format(host, port)
+server.serve_forever()
