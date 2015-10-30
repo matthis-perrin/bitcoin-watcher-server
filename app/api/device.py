@@ -1,4 +1,4 @@
-from app.api.utils import api
+from app.api.core.utils import api
 from app.db.user_device import UserDevice
 from app.exception import MyBitsException
 

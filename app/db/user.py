@@ -1,6 +1,6 @@
 from random import random
 
-from app.db.mysql import MySQL
+from app.db.core.mysql import MySQL
 from app.db.user_device import UserDevice
 from app.exception import MyBitsException
 

@@ -1,8 +1,10 @@
-from pyramid.config import Configurator
 from wsgiref.simple_server import make_server
 
-from app.api.routes import wire_routes
+from pyramid.config import Configurator
+
+from app.api.core.routes import wire_routes
 from app.config import Config
+
 
 
 # Setup the api routes
