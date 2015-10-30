@@ -7,6 +7,6 @@
     "host": "localhost",
     "user": "root",
     "password": "",
-    "database": "bitcoin_watcher"
+    "database": "my_bits"
   }
 }
