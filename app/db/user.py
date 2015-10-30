@@ -15,24 +15,24 @@ class User:
     @staticmethod
     def get(user_id):
         """
-        Returns the user from the database with `user_id`
+        Returns the user `user_id`.
         """
         res = MySQL.run('SELECT * FROM user WHERE user_id = {}'.format(user_id))
         if len(res) == 0:
-            raise MyBitsException('User with `user_id` {} not found'.format(user_id))
+            raise MyBitsException('User {} not found'.format(user_id))
         return User(*res[0])
 
     def get_devices(self):
         """
-        Returns all the devices linked to the user with `user_id`
+        Returns all the devices linked to the user`user_id`.
         """
         return UserDevice.get_all(self.user_id)
 
     @staticmethod
     def create():
         """
-        Create a new user in db.
-        Returns the `user_id` of the newly created user
+        Create a new user.
+        Returns the `user_id` of the newly created user.
         """
         user_id = int(random() * (2**32 - 1))
         MySQL.run('INSERT INTO user (user_id) VALUES ({})'.format(user_id))

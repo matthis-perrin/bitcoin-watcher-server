@@ -1,7 +1,7 @@
 from pyramid.config import Configurator
 from wsgiref.simple_server import make_server
 
-from app.api.main import wire_routes
+from app.api.routes import wire_routes
 from app.config import Config
 
 

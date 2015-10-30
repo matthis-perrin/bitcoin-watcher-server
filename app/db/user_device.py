@@ -1,6 +1,7 @@
 from random import random
 
 from app.db.mysql import MySQL
+from app.exception import MyBitsException
 
 
 class UserDevice:
@@ -19,15 +20,17 @@ class UserDevice:
     @staticmethod
     def get(device_id):
         """
-        Returns the device info from the database with `device_id`
+        Returns the device `device_id`.
         """
         res = MySQL.run('SELECT * FROM user_device WHERE device_id = {}'.format(device_id))
+        if len(res) == 0:
+            raise MyBitsException('Device {} not found'.format(device_id))
         return UserDevice(*res[0])
 
     @staticmethod
     def get_all(user_id):
         """
-        Returns all the devices linked to the user with `user_id`
+        Returns all the devices linked to the user `user_id`.
         """
         res = MySQL.run('SELECT * FROM user_device WHERE user_id = {}'.format(user_id))
         return [UserDevice(*device_data) for device_data in res]
@@ -35,8 +38,8 @@ class UserDevice:
     @staticmethod
     def create(user_id, platform, system_version, app_version, push_token):
         """
-        Create a new user device in db.
-        Returns the `device_id` of the newly created user device
+        Create a new device for the user `user_id`.
+        Returns the `device_id` of the newly created user device.
         """
         device_id = int(random() * (2 ** 32 - 1))
         query = '''

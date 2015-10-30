@@ -2,6 +2,7 @@ from functools import partial
 
 import app.api.user as user
 import app.api.device as device
+import app.api.address as address
 
 
 def handle_404(request):
@@ -15,7 +16,8 @@ def wire_route(config, path=None, handler=None, renderer='json', request_method=
 
 
 def wire_routes(config):
-    wire_route(config, path='/user/register', handler=user.register)
-    wire_route(config, path='/user/{user_id}/device/register', handler=device.register)
+    wire_route(config, path='/api/{api_version}/user/register', handler=user.register)
+    wire_route(config, path='/api/{api_version}/user/{user_id}/device/register', handler=device.register)
+    wire_route(config, path='/api/{api_version}/user/{user_id}/address/add', handler=address.add)
 
     config.add_view(handle_404, renderer='json', context='pyramid.httpexceptions.HTTPNotFound')

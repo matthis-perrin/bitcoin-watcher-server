@@ -8,18 +8,32 @@ MySQL.create_database(Config.get('db').get('database'))
 
 MySQL.run('''
     CREATE TABLE IF NOT EXISTS user (
-        user_id       INT(8) UNSIGNED PRIMARY KEY,
-        creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)''')
+        user_id       INT(8) UNSIGNED,
+        creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id)
+    )
+''')
 
 MySQL.run('''
     CREATE TABLE IF NOT EXISTS user_device (
-        device_id      INT(8) UNSIGNED PRIMARY KEY,
+        device_id      INT(8) UNSIGNED,
         user_id        INT(8) UNSIGNED,
-        platform       TEXT CHARACTER SET utf8,
-        system_version TEXT CHARACTER SET utf8,
-        app_version    TEXT CHARACTER SET utf8,
-        push_token     TEXT CHARACTER SET utf8,
+        platform       VARCHAR(255) CHARACTER SET utf8,
+        system_version VARCHAR(255) CHARACTER SET utf8,
+        app_version    VARCHAR(255) CHARACTER SET utf8,
+        push_token     VARCHAR(255) CHARACTER SET utf8,
         creation_time  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        last_seen      TIMESTAMP
-)''')
+        last_seen      TIMESTAMP,
+        PRIMARY KEY (device_id)
+    )
+''')
+
+MySQL.run('''
+    CREATE TABLE IF NOT EXISTS user_address (
+        user_id       INT(8) UNSIGNED,
+        address       VARCHAR(255) CHARACTER SET utf8,
+        address_type  VARCHAR(255) CHARACTER SET utf8,
+        creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, address)
+    )
+''')
