@@ -8,6 +8,7 @@ from app.config import Config
 # Setup the api routes
 config = Configurator()
 wire_routes(config)
+config.scan()
 
 # Start the server
 api_config = Config.get('api')

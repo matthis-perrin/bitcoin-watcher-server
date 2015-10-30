@@ -2,6 +2,7 @@ from random import random
 
 from app.db.mysql import MySQL
 from app.db.user_device import UserDevice
+from app.exception import MyBitsException
 
 
 class User:
@@ -17,6 +18,8 @@ class User:
         Returns the user from the database with `user_id`
         """
         res = MySQL.run('SELECT * FROM user WHERE user_id = {}'.format(user_id))
+        if len(res) == 0:
+            raise MyBitsException('User with `user_id` {} not found'.format(user_id))
         return User(*res[0])
 
     def get_devices(self):
