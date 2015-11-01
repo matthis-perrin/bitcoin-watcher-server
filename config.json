@@ -3,6 +3,10 @@
     "host": "0.0.0.0",
     "port": 6543
   },
+  "blockcypher": {
+    "api_key": "537ac90884c8658a644a2e48d72ddb8c",
+    "webhook_callback_url": "http://requestb.in/11ymh171"
+  },
   "db": {
     "host": "localhost",
     "user": "root",

@@ -33,6 +33,7 @@ MySQL.run('''
         user_id       INT(8) UNSIGNED,
         address       VARCHAR(255) CHARACTER SET utf8,
         address_type  VARCHAR(255) CHARACTER SET utf8,
+        webhook_id    VARCHAR(255) CHARACTER SET utf8,
         creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (user_id, address)
     )
