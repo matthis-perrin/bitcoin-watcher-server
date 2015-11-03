@@ -10,6 +10,7 @@ class UserAddress:
         (self.user_id,
          self.address,         # Text representation of a bitcoin address
          self.type,            # Type of address (plain text for now) TODO - Make that an enum
+         self.wallet_name,     # Name of the wallet on blockcypher
          self.webhook_id,      # Id of the webhook on blockcypher
          self.creation_time,   # When the address got linked to the user
          ) = args
@@ -33,14 +34,14 @@ class UserAddress:
         return [UserAddress(*address_data) for address_data in res]
 
     @staticmethod
-    def add(user_id, address, address_type, webhook_id):
+    def add(user_id, address, address_type, wallet_name, webhook_id):
         """
         Add the address `address` for the user `user_id`.
         """
         device_id = int(random() * (2 ** 32 - 1))
         query = '''
-          INSERT INTO user_address (user_id, address, address_type, webhook_id)
-          VALUES ({}, '{}', '{}', '{}')
-        '''.format(user_id, address, address_type, webhook_id)
+          INSERT INTO user_address (user_id, address, address_type, wallet_name, webhook_id)
+          VALUES ({}, '{}', '{}', '{}', '{}')
+        '''.format(user_id, address, address_type, wallet_name, webhook_id)
         MySQL.run(query)
 
