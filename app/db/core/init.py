@@ -39,3 +39,15 @@ MySQL.run('''
         PRIMARY KEY (user_id, address)
     )
 ''')
+
+MySQL.run('''
+    CREATE TABLE IF NOT EXISTS address_lookup (
+        user_id       INT(8) UNSIGNED,
+        address       VARCHAR(255) CHARACTER SET utf8,
+        wallet_name   VARCHAR(255) CHARACTER SET utf8,
+        xpub          VARCHAR(255) CHARACTER SET utf8,
+        offset        INT(8) UNSIGNED,
+        creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, address)
+    )
+''')

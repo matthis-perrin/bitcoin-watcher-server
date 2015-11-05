@@ -16,13 +16,23 @@ class UserAddress:
          ) = args
 
     @staticmethod
-    def get(user_id, address):
+    def get_by_address(user_id, address):
         """
         Returns the address `address` linked to the user `user_id`.
         """
         res = MySQL.run('SELECT * FROM user_address WHERE user_id = {} AND address = {}'.format(user_id, address))
         if len(res) == 0:
             raise MyBitsException('Address {} for user {} not found'.format(address, user_id))
+        return UserAddress(*res[0])
+
+    @staticmethod
+    def get_by_wallet_name(wallet_name):
+        """
+        Returns the address registered to the wallet `wallet_name` on BlockCypher..
+        """
+        res = MySQL.run("SELECT * FROM user_address WHERE wallet_name = '{}'".format(wallet_name))
+        if len(res) == 0:
+            raise MyBitsException('Address with wallet {} not found'.format(wallet_name))
         return UserAddress(*res[0])
 
     @staticmethod

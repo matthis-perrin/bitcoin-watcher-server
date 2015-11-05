@@ -1,0 +1,65 @@
+from random import random
+
+from app.db.core.mysql import MySQL
+from app.exception import MyBitsException
+
+
+class AddressLookup:
+
+    def __init__(self, *args):
+        (self.address,        # The bitcoin address
+         self.user_id,        # The id of the user that owns this address
+         self.wallet_name,    # The name of the wallet this address is part of
+         self.xpub,           # The actual xpub the bitcoin address is derived from
+         self.offset,         # The index of the address in the xpub chain
+         self.creation_time,  # When the address lookup got created
+         ) = args
+
+    @staticmethod
+    def get(user_id, address):
+        """
+        Returns all the info of where the address is coming from (restricted to a specific user_id)
+        """
+        res = MySQL.run('SELECT * FROM address_lookup WHERE user_id = {} AND address = {}'.format(user_id, address))
+        if len(res) == 0:
+            return None
+        return AddressLookup(*res[0])
+
+    @staticmethod
+    def multi_get(user_id, addresses):
+        """
+        Returns the info of all the keys that we have in the lookup table
+        """
+        addresses = "', '".join(addresses)
+        res = MySQL.run("SELECT * FROM address_lookup WHERE user_id = {} AND address IN ('{}')"
+                        .format(user_id, addresses))
+        return [AddressLookup(*address_info) for address_info in res]
+
+    @staticmethod
+    def add(user_id, address, wallet_name, xpub):
+        """
+        Add the address info to the lookup table.
+        """
+        query = '''
+          INSERT INTO address_lookup (user_id, address, wallet_name, xpub)
+          VALUES ({}, '{}', '{}', '{}')
+        '''.format(user_id, address, wallet_name, xpub)
+        MySQL.run(query)
+
+    @staticmethod
+    def multi_add(user_id, addresses, offsets, wallet_name, xpub):
+        """
+        Add multiple addresses info to the lookup table.
+        """
+        query = '''
+          INSERT INTO address_lookup (user_id, address, wallet_name, xpub, offset)
+          VALUES
+        '''
+        values = []
+        for i in xrange(0, len(addresses)):
+            address = addresses[i]
+            offset = offsets[i]
+            values.append("({}, '{}', '{}', '{}', {})".format(user_id, address, wallet_name, xpub, offset))
+        query += ", ".join(values)
+        MySQL.run(query)
+
