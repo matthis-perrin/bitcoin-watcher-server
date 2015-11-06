@@ -22,7 +22,8 @@ class UserDevice:
         """
         Returns the device `device_id`.
         """
-        res = MySQL.run('SELECT * FROM user_device WHERE device_id = {}'.format(device_id))
+        res = MySQL.run('SELECT device_id, user_id, platform, system_version, app_version, push_token,'
+                        'creation_time, last_seen FROM user_device WHERE device_id = {}'.format(device_id))
         if len(res) == 0:
             raise MyBitsException('Device {} not found'.format(device_id))
         return UserDevice(*res[0])
@@ -32,7 +33,8 @@ class UserDevice:
         """
         Returns all the devices linked to the user `user_id`.
         """
-        res = MySQL.run('SELECT * FROM user_device WHERE user_id = {}'.format(user_id))
+        res = MySQL.run('SELECT device_id, user_id, platform, system_version, app_version, push_token,'
+                        'creation_time, last_seen FROM user_device WHERE user_id = {}'.format(user_id))
         return [UserDevice(*device_data) for device_data in res]
 
     @staticmethod
@@ -43,7 +45,7 @@ class UserDevice:
         """
         device_id = int(random() * (2 ** 32 - 1))
         query = '''
-          INSERT INTO user_device (device_id, user_id, platform, system_version, app_version, push_token, last_seen)
+          INSERT INTO user_device device_id, user_id, platform, system_version, app_version, push_token, last_seen
           VALUES ({}, {}, '{}', '{}', '{}', '{}', CURRENT_TIMESTAMP)
         '''.format(device_id, user_id, platform, system_version, app_version, push_token)
         MySQL.run(query)

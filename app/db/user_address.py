@@ -1,4 +1,4 @@
-from random import random
+from MySQLdb import IntegrityError
 
 from app.db.core.mysql import MySQL
 from app.exception import MyBitsException
@@ -9,9 +9,7 @@ class UserAddress:
     def __init__(self, *args):
         (self.user_id,
          self.address,         # Text representation of a bitcoin address
-         self.type,            # Type of address (plain text for now) TODO - Make that an enum
-         self.wallet_name,     # Name of the wallet on blockcypher
-         self.webhook_id,      # Id of the webhook on blockcypher
+         self.address_type,    # Type of address (plain text for now) TODO - Make that an enum
          self.creation_time,   # When the address got linked to the user
          ) = args
 
@@ -26,16 +24,6 @@ class UserAddress:
         return UserAddress(*res[0])
 
     @staticmethod
-    def get_by_wallet_name(wallet_name):
-        """
-        Returns the address registered to the wallet `wallet_name` on BlockCypher..
-        """
-        res = MySQL.run("SELECT * FROM user_address WHERE wallet_name = '{}'".format(wallet_name))
-        if len(res) == 0:
-            raise MyBitsException('Address with wallet {} not found'.format(wallet_name))
-        return UserAddress(*res[0])
-
-    @staticmethod
     def get_all(user_id=None):
         """
         Returns all the addresses linked to the user `user_id`.
@@ -47,14 +35,17 @@ class UserAddress:
         return [UserAddress(*address_data) for address_data in res]
 
     @staticmethod
-    def add(user_id, address, address_type, wallet_name, webhook_id):
+    def add(user_id, address, address_type):
         """
         Add the address `address` for the user `user_id`.
         """
-        device_id = int(random() * (2 ** 32 - 1))
         query = '''
-          INSERT INTO user_address (user_id, address, address_type, wallet_name, webhook_id)
-          VALUES ({}, '{}', '{}', '{}', '{}')
-        '''.format(user_id, address, address_type, wallet_name, webhook_id)
-        MySQL.run(query)
+          INSERT INTO user_address (user_id, address, address_type)
+          VALUES ({}, '{}', '{}')
+        '''.format(user_id, address, address_type)
+        try:
+            MySQL.run(query)
+        except IntegrityError as e:
+            raise MyBitsException('Address {} is already linked to user {}'.format(address, user_id))
+            print e.message
 

@@ -17,7 +17,7 @@ class User:
         """
         Returns the user `user_id`.
         """
-        res = MySQL.run('SELECT * FROM user WHERE user_id = {}'.format(user_id))
+        res = MySQL.run('SELECT user_id, creation_time FROM user WHERE user_id = {}'.format(user_id))
         if len(res) == 0:
             raise MyBitsException('User {} not found'.format(user_id))
         return User(*res[0])
