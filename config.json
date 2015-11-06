@@ -4,7 +4,7 @@
     "port": 6543
   },
   "blockcypher": {
-    "api_key": "537ac90884c8658a644a2e48d72ddb8c",
+    "api_key": "61c3223a7476a5b6eee65565eaee94ef",
     "webhook_callback_url": "http://requestb.in/103emcz1",
     "webhook_secret": "YVbpGM7yahqqz4FsyXvakVGmtnRv4dZwnfKdBx2KoG27P8HeaL"
   },

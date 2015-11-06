@@ -36,11 +36,14 @@ class UserAddress:
         return UserAddress(*res[0])
 
     @staticmethod
-    def get_all(user_id):
+    def get_all(user_id=None):
         """
         Returns all the addresses linked to the user `user_id`.
         """
-        res = MySQL.run('SELECT * FROM user_device WHERE user_id = {}'.format(user_id))
+        query = 'SELECT * FROM user_address'
+        if user_id:
+            query += ' WHERE user_id = {}'.format(user_id)
+        res = MySQL.run(query)
         return [UserAddress(*address_data) for address_data in res]
 
     @staticmethod

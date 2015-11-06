@@ -45,6 +45,12 @@ def add(context, request, api_version, user,
             if found == used_addresses:
                 break
 
+    if len(found) == 0:
+        # If we arrive here it means the user used an address that is at the index
+        # 100 or more without using any of the previous ones.
+        # TODO - Having an alert so we can take a look at the issue
+        pass
+
     # Then generate 10 more
     for i in xrange(len(sub_addresses), len(sub_addresses) + 10):
         sub_address = generate_address_from_xpub(address, i)
