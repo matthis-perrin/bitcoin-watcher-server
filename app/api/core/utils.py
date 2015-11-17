@@ -25,6 +25,9 @@ def api(enforce_user=False):
                     if 'user_id' not in query_params:
                         return dict(error='Expected `user_id` in query')
                     additional_params.append(User.get(query_params['user_id']))
+                if request.method == 'GET':
+                    json_body = request.params
+                elif request.method == 'POST':
                     try:
                         json_body = request.json_body
                     except Exception:
