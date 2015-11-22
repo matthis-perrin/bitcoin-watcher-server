@@ -20,4 +20,4 @@ def generate(context, request, api_version,
     except EncodingError:
         raise MyBitsException('Invalid `xpub`')
 
-    return [str(key.address()) for key in mpk.children(max_level=count-1, start_index=start, include_hardened=False)]
+    return [str(key.address()) for key in mpk.subkeys("0/{}-{}".format(start, start+count))]
